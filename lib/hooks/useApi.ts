@@ -1,15 +1,13 @@
 import useSWR from "swr";
 import api from "@lib/utils/api";
-import type { SWRHook, SWRConfiguration, Key } from "swr";
+import type { SWRResponse, SWRConfiguration, Key } from "swr";
 
 interface ApiError {
   message?: string;
   httpStatus: number;
   success?: boolean;
 }
-export interface UseApi<R> extends SWRHook {
-  data?: R;
-  error?: ApiError;
+export interface UseApi<Data = any> extends SWRResponse<Data, ApiError> {
   loading: boolean;
 }
 
