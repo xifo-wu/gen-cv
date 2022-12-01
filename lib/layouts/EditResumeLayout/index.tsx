@@ -22,7 +22,6 @@ const EditResumeLayout = ({ children }: Props) => {
     query['resume-id'] ? `/api/v1/resumes/${query['resume-id']}` : null,
   );
 
-  console.log(resumeLoading, loading);
   if (loading || resumeLoading) {
     // TODO: Add Loading Component;
     return <>Loading</>;

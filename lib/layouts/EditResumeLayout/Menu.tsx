@@ -67,14 +67,12 @@ const Menu = () => {
                 },
               });
 
-              console.log(response, 'response');
+              return response;
             } catch (error: any) {
               // TODO fix any
               toast.error(error.message);
               return originData;
             }
-
-            return originData;
           },
           { revalidate: false },
         );
