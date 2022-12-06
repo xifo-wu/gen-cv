@@ -62,9 +62,7 @@ const Menu = () => {
           async (originData: any) => {
             try {
               const response = await api.put(resumeApi!, {
-                data: {
-                  moduleOrder: reordered,
-                },
+                moduleOrder: reordered,
               });
 
               return response;
