@@ -22,6 +22,7 @@
     "next": "latest",
     "react": "latest",
     "react-dom": "latest",
+    "react-hook-form": "^7.40.0",
     "react-icons": "^4.7.1",
     "react-toastify": "^9.1.1",
     "react-use": "^17.4.0",
