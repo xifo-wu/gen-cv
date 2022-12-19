@@ -1,3 +1,18 @@
+import type { BasicsDataKeys } from './type';
+
+export const resumeBasicDefaultZhCN: Record<BasicsDataKeys, string> = {
+  name: '姓名',
+  mobile: '联系电话',
+  job: '求职意向',
+  email: '电子邮箱',
+  educationalQualifications: '最高学历',
+  website: '个人网站',
+  birthday: '出生日期',
+  jobYear: '工作年限',
+  age: '年龄',
+  avatar: '头像',
+};
+
 export const moduleMap = {
   resumeBasic: {
     id: 'resumeBasic',
@@ -36,7 +51,7 @@ export const moduleMap = {
   // },
 };
 
-export type ModuleMapKeys = keyof typeof moduleMap
+export type ModuleMapKeys = keyof typeof moduleMap;
 
 const modules = [
   moduleMap.resumeBasic,

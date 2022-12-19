@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Drawer } from '@mui/material';
 import Header from './Header';
@@ -12,15 +12,30 @@ interface Props {
   children?: React.ReactNode;
 }
 
+export const ResumeIdContext = createContext<string | string[]>('');
+
+export const ResumeIdProvider = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
+  const { query } = router;
+
+  return (
+    <ResumeIdContext.Provider value={query['resume-id'] || ''}>{children}</ResumeIdContext.Provider>
+  );
+};
+
+export const useResumeId = () => useContext(ResumeIdContext);
+
 const EditResumeLayout = ({ children }: Props) => {
   const router = useRouter();
+  const resumeId = useResumeId();
+  const { error: resumeError, loading: resumeLoading } = useApi<any>(
+    resumeId ? `/api/v1/resumes/${resumeId}` : null,
+  );
+
   const { query } = router;
 
   // TODO: Fix any type
   const { data: user = {}, error, loading } = useApi<any>('/api/v1/users/current');
-  const { error: resumeError, loading: resumeLoading } = useApi<any>(
-    query['resume-id'] ? `/api/v1/resumes/${query['resume-id']}` : null,
-  );
 
   if (loading || resumeLoading) {
     // TODO: Add Loading Component;

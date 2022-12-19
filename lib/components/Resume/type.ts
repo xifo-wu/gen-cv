@@ -1,10 +1,11 @@
-export type ModulesKey = 'basic' | 'education' | 'workExperience' | 'project' | 'others';
+export type ModulesKey = 'education' | 'workExperience' | 'project';
 
 export interface ResumeBasicField {
   id: string | number;
   value: string;
   visible?: boolean;
-  showLabel?: boolean;
+  isShowLabel?: boolean;
+  isShowIcon?: boolean;
   label?: string;
   icon?: string;
 }
@@ -30,10 +31,14 @@ export type BasicsDataKeys =
   | 'website'
   | 'birthday'
   | 'age'
-  | 'avatar';
+  | 'avatar'
+  | 'jobYear';
 
 // 个人信息基础信息
-export type BasicsData = Record<BasicsDataKeys, ResumeBasicField>;
+export interface BasicsData extends Record<BasicsDataKeys, ResumeBasicField> {
+  orderKeys: string;
+  inAWord: string;
+}
 
 export interface Education extends ModuleBase {
   educationDetails: EducationDetail[];
@@ -87,4 +92,9 @@ export interface ResumeType {
   education: Education;
   workExperience: WorkExperience;
   project: Project;
+}
+
+// Resume Template Component Props Type
+export interface ResumePaperProps {
+  data: ResumeType;
 }

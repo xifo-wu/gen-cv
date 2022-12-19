@@ -47,12 +47,15 @@ export default {
   },
   // 内容容器样式
   mainContainer: {
-    flexGrow: 1,
+    flexShrink: 0,
+    // flexGrow: 1,
     background: '#f1f5f9',
     p: 3,
+    pt: 10,
     minHeight: '100vh',
     height: '100%',
-    width: { sm: `calc(100% - ${drawerWidth}px)` },
+    width: `calc(100% - ${drawerWidth}px)`,
+    minWidth: 'calc(210mm + 64px)',
   },
   menuIcon: { minWidth: 32 },
   menuList: {
