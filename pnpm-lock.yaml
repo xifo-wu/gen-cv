@@ -15,6 +15,8 @@ specifiers:
   eslint-config-next: latest
   framer-motion: ^7.6.15
   immer: ^9.0.16
+  jotai: ^1.11.2
+  jotai-immer: ^0.1.0
   lodash: ^4.17.21
   next: latest
   react: latest
@@ -37,6 +39,8 @@ dependencies:
   axios: 1.2.0
   framer-motion: 7.6.15_biqbaboplfbrettd7655fr4n2y
   immer: 9.0.16
+  jotai: 1.11.2_ldhptygwmnff4nrhjg35c5utke
+  jotai-immer: 0.1.0_icchxyuqzj2r42m4lbofg5dolu
   lodash: 4.17.21
   next: 13.0.7_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
@@ -2030,6 +2034,59 @@ packages:
   /isexe/2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
     dev: true
+
+  /jotai-immer/0.1.0_icchxyuqzj2r42m4lbofg5dolu:
+    resolution: {integrity: sha512-TwiPKgrf/V0tSh2CSEEilhhCHm0LSgIrZmIXvQRp7+aKT+cATNFUBJeSBUb42wMnTh43DoveGSUiTN1oyTv6Wg==}
+    peerDependencies:
+      immer: '*'
+      jotai: '*'
+      react: '>=17.0.0'
+    dependencies:
+      immer: 9.0.16
+      jotai: 1.11.2_ldhptygwmnff4nrhjg35c5utke
+      react: 18.2.0
+    dev: false
+
+  /jotai/1.11.2_ldhptygwmnff4nrhjg35c5utke:
+    resolution: {integrity: sha512-hVLn1aS1QprDy+NrvyWIOcaA/LEG5AY0Z7kWtx26EJ8eH8DY8pW1wUM0PrlqQzthqd6HdEVtXLY1rB//0n8LvA==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@babel/core': '*'
+      '@babel/template': '*'
+      jotai-immer: '*'
+      jotai-optics: '*'
+      jotai-redux: '*'
+      jotai-tanstack-query: '*'
+      jotai-urql: '*'
+      jotai-valtio: '*'
+      jotai-xstate: '*'
+      jotai-zustand: '*'
+      react: '>=16.8'
+    peerDependenciesMeta:
+      '@babel/core':
+        optional: true
+      '@babel/template':
+        optional: true
+      jotai-immer:
+        optional: true
+      jotai-optics:
+        optional: true
+      jotai-redux:
+        optional: true
+      jotai-tanstack-query:
+        optional: true
+      jotai-urql:
+        optional: true
+      jotai-valtio:
+        optional: true
+      jotai-xstate:
+        optional: true
+      jotai-zustand:
+        optional: true
+    dependencies:
+      jotai-immer: 0.1.0_icchxyuqzj2r42m4lbofg5dolu
+      react: 18.2.0
+    dev: false
 
   /js-cookie/2.2.1:
     resolution: {integrity: sha512-HvdH2LzI/EAZcUwA8+0nKNtWHqS+ZmijLA30RwZA0bo7ToCckjK5MkGhjED9KoRcXO6BaGI3I9UIzSA1FKFPOQ==}

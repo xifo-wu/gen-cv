@@ -1,12 +1,14 @@
 import React, { createContext, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Box, Drawer } from '@mui/material';
+import FullscreenError from '@lib/components/FullscreenError';
 import Header from './Header';
 import Menu from './Menu';
 import useApi from '@lib/hooks/useApi';
 import styles from './styles';
+import Sidebar from './Sidebar';
 
-const drawerWidth = 208;
+const drawerWidth = 256;
 
 interface Props {
   children?: React.ReactNode;
@@ -28,9 +30,13 @@ export const useResumeId = () => useContext(ResumeIdContext);
 const EditResumeLayout = ({ children }: Props) => {
   const router = useRouter();
   const resumeId = useResumeId();
-  const { error: resumeError, loading: resumeLoading } = useApi<any>(
-    resumeId ? `/api/v1/resumes/${resumeId}` : null,
-  );
+  const {
+    error: resumeError,
+    loading: resumeLoading,
+    ...rest
+  } = useApi<any>(resumeId ? `/api/v1/resumes/${resumeId}` : null);
+
+  console.log(resumeError, rest, 'rest');
 
   const { query } = router;
 
@@ -43,8 +49,9 @@ const EditResumeLayout = ({ children }: Props) => {
   }
 
   if (error || resumeError) {
-    // TODO: Solution Error
-    return <>获取数据出错</>;
+    return (
+      <FullscreenError description={resumeError?.message} httpStatus={resumeError?.httpStatus} />
+    );
   }
 
   if (user.username !== query.username) {
@@ -54,18 +61,22 @@ const EditResumeLayout = ({ children }: Props) => {
 
   const drawer = (
     <Box sx={styles.drawerContainer}>
+
       <Menu />
     </Box>
   );
 
   return (
     <Box sx={styles.container}>
-      <Header />
-      <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
+      {/* <Header /> */}
+      <Sidebar>
+      {drawer}
+      </Sidebar>
+      {/* <Box component="nav" sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}>
         <Drawer variant="permanent" sx={styles.drawerWrap} open>
           {drawer}
         </Drawer>
-      </Box>
+      </Box> */}
 
       <Box component="main" sx={styles.mainContainer}>
         {children}

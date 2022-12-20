@@ -60,17 +60,16 @@ const Menu = () => {
         // TODO fix any
         mutate(
           async (originData: any) => {
-            try {
-              const response = await api.put(resumeApi!, {
-                moduleOrder: reordered,
-              });
+            const { response, error } = await api.put<any, any>(resumeApi!, {
+              moduleOrder: reordered,
+            });
 
-              return response;
-            } catch (error: any) {
-              // TODO fix any
+            if (error) {
               toast.error(error.message);
               return originData;
             }
+
+            return response;
           },
           { revalidate: false },
         );

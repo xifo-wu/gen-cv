@@ -1,8 +1,33 @@
 import type { Theme } from '@mui/material';
 
-const drawerWidth = 208;
+const drawerWidth = 256;
 
 export default {
+  // ===================
+  // Sidebar Styles Start
+  // ===================
+  sidebarWrapper: (theme: Theme) => ({
+    width: { sm: drawerWidth },
+    background: theme.palette.mode === 'dark' ? '#181c32' : '#fff',
+    boxShadow: '0 0 21px 0 rgba(89,102,122,.1)',
+    minHeight: '100vh',
+    transition: '.3s',
+    zIndex: 9,
+  }),
+  drawerWrap: {
+    display: { xs: 'none', sm: 'block' },
+    '& .MuiDrawer-paper': {
+      boxSizing: 'border-box',
+      width: drawerWidth,
+      border: 'none',
+    },
+  },
+  logoBox: {
+    py: 2,
+    px: 4,
+  },
+
+
   container: {
     display: 'flex',
   },
@@ -28,22 +53,11 @@ export default {
       boxShadow: '0px 10px 30px 0px rgba(82,63,105,.05)',
     },
   }),
-  drawerWrap: {
-    display: { xs: 'none', sm: 'block' },
-    '& .MuiDrawer-paper': {
-      boxSizing: 'border-box',
-      width: drawerWidth,
-      border: 'none',
-      boxShadow: '0px 10px 30px 0px rgba(82,63,105,.05)',
-      minHeight: '100vh',
-      height: '100%',
-    },
-  },
   // 抽屉容器样式
   drawerContainer: {
-    pt: 8, // 自身 Padding 16px + Header 高度 48px
-    overflowX: 'hidden',
-    height: '100%',
+    // pt: 8, // 自身 Padding 16px + Header 高度 48px
+    // overflowX: 'hidden',
+    // height: '100%',
   },
   // 内容容器样式
   mainContainer: {
@@ -64,12 +78,12 @@ export default {
   },
   // 模块菜单 Item
   moduleItem: {
-    "& ul": {
+    '& ul': {
       listStyle: 'none',
       my: 0,
       px: 0,
     },
-    "& .item-box": {
+    '& .item-box': {
       px: 2,
       display: 'flex',
       alignItems: 'center',

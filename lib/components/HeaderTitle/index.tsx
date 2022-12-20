@@ -2,12 +2,10 @@ import { Typography } from '@mui/material';
 import type { HtmlHTMLAttributes } from 'react';
 
 const titleBase = {
-  fontSize: '1.5rem',
-  lineHeight: '2rem',
+  fontSize: '2.375rem',
   userSelect: 'none',
   fontWeight: 700,
-  fontFamily:
-    'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+  fontFamily: 'monospace',
 };
 
 const titleGradient = {
