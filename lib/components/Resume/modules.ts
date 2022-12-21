@@ -1,6 +1,6 @@
-import type { BasicsDataKeys } from './type';
+import type { ResumeBasicsDataKeys } from './type';
 
-export const resumeBasicDefaultZhCN: Record<BasicsDataKeys, string> = {
+export const resumeBasicDefaultZhCN: Record<ResumeBasicsDataKeys, string> = {
   name: '姓名',
   mobile: '联系电话',
   job: '求职意向',
@@ -10,7 +10,8 @@ export const resumeBasicDefaultZhCN: Record<BasicsDataKeys, string> = {
   birthday: '出生日期',
   jobYear: '工作年限',
   age: '年龄',
-  avatar: '头像',
+  avatar: '照片',
+  inAWord: '一句话',
 };
 
 export const moduleMap = {

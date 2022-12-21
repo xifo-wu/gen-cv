@@ -7,6 +7,7 @@ import Menu from './Menu';
 import useApi from '@lib/hooks/useApi';
 import styles from './styles';
 import Sidebar from './Sidebar';
+import ResumeBasicDrawer from '@lib/components/ResumeBasicDrawer';
 
 const drawerWidth = 256;
 
@@ -28,6 +29,7 @@ export const ResumeIdProvider = ({ children }: { children: React.ReactNode }) =>
 export const useResumeId = () => useContext(ResumeIdContext);
 
 const EditResumeLayout = ({ children }: Props) => {
+
   const router = useRouter();
   const resumeId = useResumeId();
   const {
@@ -35,8 +37,6 @@ const EditResumeLayout = ({ children }: Props) => {
     loading: resumeLoading,
     ...rest
   } = useApi<any>(resumeId ? `/api/v1/resumes/${resumeId}` : null);
-
-  console.log(resumeError, rest, 'rest');
 
   const { query } = router;
 
@@ -61,7 +61,6 @@ const EditResumeLayout = ({ children }: Props) => {
 
   const drawer = (
     <Box sx={styles.drawerContainer}>
-
       <Menu />
     </Box>
   );
@@ -81,6 +80,8 @@ const EditResumeLayout = ({ children }: Props) => {
       <Box component="main" sx={styles.mainContainer}>
         {children}
       </Box>
+
+      <ResumeBasicDrawer />
     </Box>
   );
 };

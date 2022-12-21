@@ -44,7 +44,6 @@ const Basic = ({ themeColor, data, preview }: Props) => {
     }
 
     debounceRef.current = setTimeout(() => {
-      console.log(watch(), 'setTimeout(');
       mutate(
         async (originData: any) => {
           const { response, error } = await api.put<any, any>(`${baseApi}/resume-basic`, watch());

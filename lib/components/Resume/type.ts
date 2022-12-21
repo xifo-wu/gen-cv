@@ -32,13 +32,16 @@ export type BasicsDataKeys =
   | 'birthday'
   | 'age'
   | 'avatar'
-  | 'jobYear';
+  | 'jobYear'
+  | 'inAWord';
 
 // 个人信息基础信息
 export interface BasicsData extends Record<BasicsDataKeys, ResumeBasicField> {
   orderKeys: string;
-  inAWord: string;
 }
+
+export type ResumeBasicsDataKeys = BasicsDataKeys;
+export type ResumeBasicsData = BasicsData;
 
 export interface Education extends ModuleBase {
   educationDetails: EducationDetail[];

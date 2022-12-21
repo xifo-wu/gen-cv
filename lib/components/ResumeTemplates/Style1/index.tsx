@@ -15,7 +15,6 @@ const Empty = () => {
 };
 
 const ResumeTemplateStyle1 = ({ data }: ResumePaperProps) => {
-  console.log(data, 'data');
   const { resumeBasic, moduleOrder, themeColor = '#2065d1' } = data;
 
   const moduleItems = helpers.buildModuleItems(data, moduleOrder);

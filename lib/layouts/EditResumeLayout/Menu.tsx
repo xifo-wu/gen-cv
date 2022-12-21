@@ -12,12 +12,15 @@ import {
   ListItemIcon,
   ListItemText,
   Box,
+  ListItem,
 } from '@mui/material';
 import useApi from '@lib/hooks/useApi';
 import api from '@lib/utils/api';
 import ModuleMenuItem from './ModuleMenuItem';
 import type { ModuleMapKeys } from '@lib/components/Resume/modules';
 import styles from './styles';
+import { useSetAtom } from 'jotai';
+import { resumeBasicDrawer } from '@lib/atom/resume-atom';
 
 const menuList = [
   {
@@ -35,6 +38,8 @@ const menuList = [
 const Menu = () => {
   const router = useRouter();
   const { query } = router;
+
+  const setResumeBasicDrawer = useSetAtom(resumeBasicDrawer);
 
   const resumeApi = query['resume-id'] ? `/api/v1/resumes/${query['resume-id']}` : null;
   const { data: resume, mutate } = useApi<any>(resumeApi);
@@ -82,6 +87,12 @@ const Menu = () => {
   );
 
   const handleReorder = useCallback((newItems: string[]) => setReordered(newItems.join(',')), []);
+  const handleOpenResumeBasicDrawer = () => {
+    setResumeBasicDrawer({
+      open: true,
+      resume,
+    });
+  };
   const handleActionClick = () => {};
 
   return (
@@ -102,16 +113,19 @@ const Menu = () => {
           </ListItemButton>
         ))}
       </List>
+
       <ListSubheader disableSticky component="div">
         模块列表
       </ListSubheader>
 
-      <ListItemButton disableTouchRipple sx={{ '&:hover': { backgroundColor: 'transparent' } }}>
+      <ListItem>
         <ListItemIcon sx={styles.menuIcon}>
           <TbMist />
         </ListItemIcon>
-        <ListItemText primaryTypographyProps={{ noWrap: true }} primary="基础信息" />
-      </ListItemButton>
+        <ListItemButton onClick={handleOpenResumeBasicDrawer}>
+          <ListItemText primaryTypographyProps={{ noWrap: true }} primary="基础信息" />
+        </ListItemButton>
+      </ListItem>
 
       <Box sx={styles.moduleItem}>
         <Reorder.Group axis="y" onReorder={handleReorder} values={reorderedGroupValue}>
