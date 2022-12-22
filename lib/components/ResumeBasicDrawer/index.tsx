@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Box, Checkbox, Input, TextField, Stack, SwipeableDrawer, Typography } from '@mui/material';
+import produce from 'immer';
+import { Box, Checkbox, TextField, Stack, SwipeableDrawer, Typography } from '@mui/material';
 import { TbId } from 'react-icons/tb';
 import { useMemo, useEffect, useRef } from 'react';
 import { useSWRConfig } from 'swr';
@@ -29,9 +30,9 @@ const resumeBasicArray: Array<ResumeBasicsDataKeys> = [
 ];
 
 const ResumeBasicDrawer = () => {
-  const { mutate } = useSWRConfig();
   const debounceRef = useRef<NodeJS.Timer>();
-  const [{ open, resume }, setValue] = useAtom(resumeBasicDrawer);
+  const { mutate } = useSWRConfig();
+  const [{ open, resume }, setResumeBasicDrawerValue] = useAtom(resumeBasicDrawer);
 
   const resumeBasic = useMemo(() => {
     return (resume?.resumeBasic || {}) as ResumeBasicsData;
@@ -53,22 +54,21 @@ const ResumeBasicDrawer = () => {
       return;
     }
 
-    setValue({ open, resume });
+    setResumeBasicDrawerValue({ open, resume });
   };
 
   const handleUpdateResumeBasic = () => {
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
+    const baseUrl = `/api/v1/resumes/${resume?.id}`;
 
     debounceRef.current = setTimeout(() => {
       mutate(
-        `/api/v1/resumes/${resume?.id}`,
+        baseUrl,
         async (originData: any) => {
-          const { response, error } = await api.put<any, any>(
-            `/api/v1/resumes/${resume?.id}/resume-basic`,
-            watch(),
-          );
+          // TODO(FIX BUG): 没有 ID 的时候需要和其他有 ID 的显示格式保持一致。
+          const { response, error } = await api.put<any, any>(`${baseUrl}/resume-basic`,  watch());
           if (error) {
             toast.error(error.message);
             return originData;
@@ -79,8 +79,6 @@ const ResumeBasicDrawer = () => {
         { revalidate: false },
       );
     }, 2000);
-
-    console.log(watch(), 'watch');
   };
 
   return (
@@ -122,7 +120,7 @@ const ResumeBasicDrawer = () => {
                         {...field}
                         onBlur={(e) => {
                           field.onBlur();
-                          // onBlur?.(e);
+                          handleUpdateResumeBasic();
                         }}
                       />
                     )}

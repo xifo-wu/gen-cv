@@ -1,12 +1,16 @@
 import _ from 'lodash';
-import { useRef, useState } from 'react';
+import { useRef, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { TbSettings } from 'react-icons/tb';
-import { Grid, Box, IconButton, useTheme } from '@mui/material';
+import { Grid, Box, IconButton, useTheme, Typography } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version
 import useApi from '@lib/hooks/useApi';
-import type { BasicsData, ResumeBasicField } from '@lib/components/Resume/type';
+import type {
+  BasicsData,
+  ResumeBasicsDataKeys,
+  ResumeBasicField,
+} from '@lib/components/Resume/type';
 import styles from './styles';
 
 import api from '@lib/utils/api';
@@ -17,6 +21,7 @@ import BasicLayoutSetting from '@lib/components/Resume/components/BasicLayoutSet
 
 import basicDefaultIcon from '@lib/components/Resume/basicDefaultIcon';
 import { useResumeId } from '@lib/layouts/EditResumeLayout';
+import SortResumeBasicFieldPopper from '@lib/components/Resume/SortResumeBasicFieldPopper';
 
 interface Props {
   data: BasicsData;
@@ -24,10 +29,18 @@ interface Props {
   themeColor: string;
 }
 
-const infoKeys = ['mobile', 'email', 'educationalQualifications', 'website', 'birthday', 'age'];
+const infoKeys: Array<ResumeBasicsDataKeys> = [
+  'mobile',
+  'email',
+  'educationalQualifications',
+  'website',
+  'birthday',
+  'age',
+  'jobYear',
+];
 
 const Basic = ({ themeColor, data, preview }: Props) => {
-  if (_.isEmpty(data)) return <Box />;
+  const { control, reset, watch } = useForm<BasicsData>({ defaultValues: data });
 
   const resumeId = useResumeId() as string;
   const baseApi = `/api/v1/resumes/${resumeId}`;
@@ -35,8 +48,22 @@ const Basic = ({ themeColor, data, preview }: Props) => {
 
   const theme = useTheme();
   const debounceRef = useRef<NodeJS.Timer>();
-  const infoItemsObj = _.pick(data, data.orderKeys.split(","));
-  const { control, watch } = useForm<BasicsData>({ defaultValues: data });
+
+  const infoItems = _.chain(data)
+    .pick(infoKeys)
+    .map((item, key) => ({
+      ...item,
+      key,
+    }))
+    .filter((item) => !!item.visible)
+    .sortBy((item) => item.sortIndex)
+    .value();
+
+  useEffect(() => {
+    reset(data);
+  }, [data]);
+
+  if (_.isEmpty(data)) return <Box />;
 
   const handleBlur = async () => {
     if (debounceRef.current) {
@@ -58,14 +85,6 @@ const Basic = ({ themeColor, data, preview }: Props) => {
       );
     }, 2000);
   };
-
-  const infoItems: Array<ResumeBasicField & { key: string }> = _.map(
-    infoItemsObj,
-    (item: any, key: any) => ({
-      key,
-      ...item,
-    }),
-  ).filter((item) => item.id && item.visible);
 
   return (
     <Box sx={styles.basicBox}>
@@ -103,9 +122,20 @@ const Basic = ({ themeColor, data, preview }: Props) => {
             </Box>
           )}
 
-          {/* <Box sx={{ mb: 1 }}>
-            <Typography variant="caption">这里放一个一句话的内容。可以直接隐藏</Typography>
-          </Box> */}
+          {data.inAWord.visible && (
+            <Box sx={{ mb: 1 }}>
+              <FieldInput
+                multiline
+                name="inAWord.value"
+                control={control}
+                readOnly={preview}
+                onBlur={handleBlur}
+                minWidth={20}
+                fontSize={12}
+                sx={{ mr: 1, flexShrink: 0 }}
+              />
+            </Box>
+          )}
 
           <Box
             sx={{
@@ -138,7 +168,6 @@ const Basic = ({ themeColor, data, preview }: Props) => {
               className="tools"
               sx={{
                 opacity: 0,
-                // display: 'none',
                 position: 'absolute',
                 zIndex: 999,
                 right: 0,
@@ -156,7 +185,7 @@ const Basic = ({ themeColor, data, preview }: Props) => {
                 }}
               >
                 <BasicLayoutPopper />
-                <BasicLayoutSetting keys={infoKeys} />
+                <SortResumeBasicFieldPopper resumeBaisc={data} items={infoItems} />
               </Box>
             </Box>
             <Grid2 className="edit-content" container spacing={2}>

@@ -8,6 +8,7 @@ export interface ResumeBasicField {
   isShowIcon?: boolean;
   label?: string;
   icon?: string;
+  sortIndex?: number;
 }
 
 export interface ModuleBase {
@@ -37,6 +38,7 @@ export type BasicsDataKeys =
 
 // 个人信息基础信息
 export interface BasicsData extends Record<BasicsDataKeys, ResumeBasicField> {
+  id: string | number;
   orderKeys: string;
 }
 

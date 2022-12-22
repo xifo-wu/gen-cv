@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { Controller } from 'react-hook-form';
 import { Box, Input } from '@mui/material';
 import type { InputProps } from '@mui/material';
@@ -28,7 +28,6 @@ const FieldInput = <T extends FieldValues, R>({
     setInputValue(e.target.value);
   };
 
-
   return (
     <Box
       sx={{
@@ -49,7 +48,7 @@ const FieldInput = <T extends FieldValues, R>({
         ...sx,
       }}
     >
-      <span className="width-block">{inputValue}</span>
+      <span className="width-block">{control._getWatch(name) || ''}</span>
       <Controller
         render={({ field }) => (
           <Input
