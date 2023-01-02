@@ -14,7 +14,7 @@ const Empty = () => {
   return <div>empty</div>;
 };
 
-const ResumeTemplateStyle1 = ({ data }: ResumePaperProps) => {
+const ResumeTemplateStyle1 = ({ preview, data }: ResumePaperProps) => {
   const { resumeBasic, moduleOrder, themeColor = '#2065d1' } = data;
 
   const moduleItems = helpers.buildModuleItems(data, moduleOrder);
@@ -47,7 +47,7 @@ const ResumeTemplateStyle1 = ({ data }: ResumePaperProps) => {
                   my: 1,
                 }}
               >
-                <ModuleTitle themeColor={themeColor} data={item} />
+                <ModuleTitle preview={preview} themeColor={themeColor} data={item} />
                 <Box sx={{ px: 3, my: 2 }}>
                   <ContentComponent data={item} />
                 </Box>

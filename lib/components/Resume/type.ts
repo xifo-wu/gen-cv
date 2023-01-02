@@ -13,6 +13,7 @@ export interface ResumeBasicField {
 
 export interface ModuleBase {
   id: string | number;
+  resumeID: string | number;
   key?: string;
   visible: boolean;
   label: string;
@@ -101,5 +102,6 @@ export interface ResumeType {
 
 // Resume Template Component Props Type
 export interface ResumePaperProps {
+  preview: boolean;
   data: ResumeType;
 }
