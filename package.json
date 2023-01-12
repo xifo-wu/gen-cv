@@ -1,6 +1,6 @@
 {
-  "name": "nextjs-with-typescript",
-  "version": "5.0.0",
+  "name": "gen-cv",
+  "version": "0.0.0.alpha",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -23,12 +23,15 @@
     "jotai-immer": "^0.1.0",
     "lodash": "^4.17.21",
     "next": "latest",
-    "react": "latest",
+    "react": "^18.2.0",
     "react-dom": "latest",
     "react-hook-form": "^7.40.0",
     "react-icons": "^4.7.1",
+    "react-markdown": "^8.0.4",
     "react-toastify": "^9.1.1",
     "react-use": "^17.4.0",
+    "rehype-raw": "^6.1.1",
+    "remark-gfm": "^3.0.1",
     "swr": "^2.0.0",
     "use-immer": "^0.8.1"
   },
