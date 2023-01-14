@@ -18,6 +18,7 @@
     "baseUrl": ".",
     "paths": {
       "@lib/*": ["lib/*"],
+      "@src/*": ["src/*"],
       "@pages/*": ["pages/*"]
     },
   },
