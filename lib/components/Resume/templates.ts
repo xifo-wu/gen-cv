@@ -2,6 +2,7 @@ import Style1 from '@lib/components/ResumeTemplates/Style1';
 import type { ResumeType } from './type';
 
 export type ResumeTemplateComponentProps = {
+  preview: boolean;
   data: ResumeType;
 };
 

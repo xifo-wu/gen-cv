@@ -21,7 +21,7 @@ const toLine = (str: string | undefined) => {
 const ModuleTitle = ({ data, themeColor, preview }: Props) => {
   const theme = useTheme();
   const debounceRef = useRef<NodeJS.Timer>();
-  const { control, reset, watch } = useForm<ResumeType[ModulesKey]>({ defaultValues: data });
+  const { control, watch } = useForm<ResumeType[ModulesKey]>({ defaultValues: data });
   const baseApi = `api/v1/resumes/${data.resumeID}`;
   const { mutate } = useApi<any>(data.resumeID ? baseApi : null);
 

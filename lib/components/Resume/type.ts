@@ -14,7 +14,7 @@ export interface ResumeBasicField {
 export interface ModuleBase {
   id: string | number;
   resumeID: string | number;
-  key?: string;
+  key?: ModulesKey;
   visible: boolean;
   label: string;
   moduleTitleType: string;
@@ -45,6 +45,12 @@ export interface BasicsData extends Record<BasicsDataKeys, ResumeBasicField> {
 
 export type ResumeBasicsDataKeys = BasicsDataKeys;
 export type ResumeBasicsData = BasicsData;
+
+export interface ResumeModuleCommonDetail {
+  id: number;
+  desc: string;
+  sortIndex: number;
+}
 
 export interface Education extends ModuleBase {
   educationDetails: EducationDetail[];

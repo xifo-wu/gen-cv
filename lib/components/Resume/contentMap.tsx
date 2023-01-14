@@ -1,3 +1,5 @@
+import CommonContent1 from "./CommonContent1";
+
 export type ContentType = {
   id: string;
   preview: React.FC;
@@ -9,7 +11,7 @@ export const educationMap: Record<string, ContentType> = {
   education1: {
     id: 'educationContent1',
     preview: () => <div></div>,
-    component: () => <div></div>,
+    component: CommonContent1,
   },
   education2: {
     id: 'educationContent2',
