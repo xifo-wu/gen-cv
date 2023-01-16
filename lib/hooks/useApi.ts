@@ -1,14 +1,24 @@
-import useSWR from "swr";
-import api from "@lib/utils/api";
-import type { SWRResponse, SWRConfiguration, Key } from "swr";
+import useSWR from 'swr';
+import api from '@lib/utils/api';
+import type { SWRResponse, SWRConfiguration, Key } from 'swr';
 
 interface ApiError {
   message?: string;
   httpStatus: number;
   success?: boolean;
 }
+
+export interface Meta {
+  has_next?: boolean;
+  has_prev?: boolean;
+  page?: number;
+  per_page?: number;
+  total?: number;
+}
+
 export interface UseApi<Data = any> extends SWRResponse<Data, ApiError> {
   loading: boolean;
+  meta?: Meta;
 }
 
 /**
@@ -20,7 +30,7 @@ const useApi = <R>(key: Key, config?: SWRConfiguration): UseApi<R> => {
   const { data, error, ...rest } = useSWR(key, api.get, config);
 
   return {
-    loading: !error && !data,
+    loading: rest.isLoading || rest.isValidating,
     error,
     ...data,
     ...rest,
