@@ -18,6 +18,7 @@
     "@mui/material": "latest",
     "@next/font": "latest",
     "axios": "^1.2.0",
+    "dayjs": "^1.11.7",
     "framer-motion": "^7.6.15",
     "immer": "^9.0.16",
     "jotai": "^1.11.2",
