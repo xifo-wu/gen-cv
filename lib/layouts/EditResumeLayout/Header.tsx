@@ -11,7 +11,7 @@ interface Props {
 
 const Header = ({ children }: Props) => {
   const router = useRouter();
-  const { data: user = {} } = useApi<any>('/api/v1/users/current');
+  const { data: user = {} } = useApi<any>('/api/v1/user');
 
   const handleGotoDashboard = useCallback(() => router.push('/dashboard'), []);
 

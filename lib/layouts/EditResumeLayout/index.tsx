@@ -22,7 +22,7 @@ export const ResumeIdProvider = ({ children }: { children: React.ReactNode }) =>
   const { query } = router;
 
   return (
-    <ResumeIdContext.Provider value={query['resume-id'] || ''}>{children}</ResumeIdContext.Provider>
+    <ResumeIdContext.Provider value={query['resume-slug'] || ''}>{children}</ResumeIdContext.Provider>
   );
 };
 
@@ -41,7 +41,7 @@ const EditResumeLayout = ({ children }: Props) => {
   const { query } = router;
 
   // TODO: Fix any type
-  const { data: user = {}, error, loading } = useApi<any>('/api/v1/users/current');
+  const { data: user = {}, error, loading } = useApi<any>('/api/v1/user');
 
   if (loading || resumeLoading) {
     // TODO: Add Loading Component;

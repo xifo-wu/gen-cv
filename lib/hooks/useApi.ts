@@ -27,7 +27,12 @@ export interface UseApi<Data = any> extends SWRResponse<Data, ApiError> {
  * @param config SWR 配置项
  */
 const useApi = <R>(key: Key, config?: SWRConfiguration): UseApi<R> => {
-  const { data, error, ...rest } = useSWR(key, api.get, config);
+  const fetchFunc = (key: string | Array<any>) => {
+    // @ts-ignore
+    return Array.isArray(key) ? api.get(...key) : api.get(key);
+  };
+
+  const { data, error, ...rest } = useSWR(key, fetchFunc, config);
 
   return {
     loading: rest.isLoading || rest.isValidating,

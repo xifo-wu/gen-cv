@@ -41,7 +41,7 @@ const Menu = () => {
 
   const setResumeBasicDrawer = useSetAtom(resumeBasicDrawer);
 
-  const resumeApi = query['resume-id'] ? `/api/v1/resumes/${query['resume-id']}` : null;
+  const resumeApi = query['resume-slug'] ? `/api/v1/resumes/${query['resume-slug']}` : null;
   const { data: resume, mutate } = useApi<any>(resumeApi);
   const [reordered, setReordered] = useState(resume.moduleOrder);
   const [debouncedReordered, setDebouncedReordered] = useState('');

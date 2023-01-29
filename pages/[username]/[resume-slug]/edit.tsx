@@ -11,10 +11,10 @@ const EditResumePage = () => {
   const { query } = router;
 
   const { data: resume } = useApi<any>(
-    query['resume-id'] ? `/api/v1/resumes/${query['resume-id']}` : null,
+    query['resume-slug'] ? `/api/v1/resumes/${query['resume-slug']}` : null,
   );
 
-  const ResumeComponent = resumeTemplates[resume.layoutType]?.component;
+  // const ResumeComponent = resumeTemplates[resume.layoutType]?.component;
 
   return (
     <Box
@@ -25,7 +25,7 @@ const EditResumePage = () => {
         },
       }}
     >
-      <ResumeComponent preview={false} data={resume} />
+      {/* <ResumeComponent preview={false} data={resume} /> */}
     </Box>
   );
 };

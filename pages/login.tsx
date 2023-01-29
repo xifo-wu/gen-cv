@@ -161,7 +161,6 @@ const RegisterPage: NextPageWithLayout = () => {
               微信登录
             </Button>
             <LoadingButton
-              loading={isSubmitting}
               sx={styles.githubOAuthBtn}
               onClick={() => toast.info('即将上线')}
               variant="contained"
