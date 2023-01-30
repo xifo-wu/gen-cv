@@ -1,7 +1,7 @@
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
-import type { ResumeModuleCommonDetail } from './type';
+import type { ResumeModuleCommonDetail } from '../type';
 
 interface Props {
   data: ResumeModuleCommonDetail;
@@ -11,6 +11,10 @@ interface Props {
 // 只展示 content。
 const CommonContent1 = ({ data }: Props) => {
   const content = data.desc;
+
+  if (!content) {
+    return <></>
+  }
 
   return (
     <ReactMarkdown children={content} rehypePlugins={[rehypeRaw]} remarkPlugins={[remarkGfm]} />

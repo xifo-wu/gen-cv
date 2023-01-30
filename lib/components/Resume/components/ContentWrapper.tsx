@@ -3,8 +3,9 @@ import { Box, IconButton, Stack } from '@mui/material';
 import { TbEdit, TbSortAscending, TbSortDescending, TbTrash } from 'react-icons/tb';
 import { useSetAtom } from 'jotai';
 import { resumeModuleModal } from '@lib/atom/resume-atom';
+import { useDialog } from '@lib/hooks/dialog';
 import styles from './ContentWrapperStyles';
-import type { ModulesKey } from './type';
+import type { ModulesKey } from '../type';
 
 interface Props {
   moduleName?: ModulesKey;
@@ -13,15 +14,12 @@ interface Props {
 }
 
 const ContentWrapper = ({ moduleName, data, children }: Props) => {
-  const setResumeModuleModal = useSetAtom(resumeModuleModal);
+  const { openDialog } = useDialog();
 
   const handleEdit = () => {
-    setResumeModuleModal((draft) => {
-      if (moduleName === 'education') {
-        draft.educationDetail.open = true;
-        draft.educationDetail.params = data;
-      }
-    });
+    if (moduleName === 'education') {
+      openDialog('EditEducationDetailModal', { ...data })
+    }
   };
 
   return (

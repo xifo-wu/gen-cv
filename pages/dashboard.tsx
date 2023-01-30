@@ -37,7 +37,7 @@ import CreateResumeDialog from '@src/components/CreateResumeDialog';
 import ConfirmDeleteResumeDialog from '@src/components/ConfirmDeleteResumeDialog';
 import BorderLinearProgress from '@lib/components/CustomMui/BorderLinearProgress';
 import { useRouter } from 'next/router';
-import { useDialog, useSetDialog } from '@lib/hooks/dialog';
+import { useDialog } from '@lib/hooks/dialog';
 import useApi from '@lib/hooks/useApi';
 import useResumes, { Resume } from '@src/hooks/useResumes';
 import api from '@lib/utils/api';

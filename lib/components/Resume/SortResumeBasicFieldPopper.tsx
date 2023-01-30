@@ -4,7 +4,6 @@ import { useRef, useState, useEffect } from 'react';
 import { Reorder } from 'framer-motion';
 import { Box, ClickAwayListener, Grow, IconButton, Paper, Popper } from '@mui/material';
 import { TbLineHeight } from 'react-icons/tb';
-import { useResumeId } from '@lib/layouts/EditResumeLayout';
 import { updateResumeBasic } from '@lib/services/resume';
 import styles from './SortResumeBasicFieldPopperStyle';
 import SortResumeBasicFieldMenuItem from './SortResumeBasicFieldMenuItem';

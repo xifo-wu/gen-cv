@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { selectAtom } from 'jotai/utils';
 import { useAtomValue, useSetAtom } from 'jotai';
 import { dataAtom } from '@lib/stores/dialog';
@@ -32,14 +32,19 @@ export const useDialog = () => {
   return { openDialog, closeDialog };
 };
 
+const initialData = {
+  open: false,
+  params: {},
+};
+
 export const useDialogValue = (dialogName: string) => {
-  const initialData = {
-    open: false,
-    params: {},
-  };
-  const selectedAtom = selectAtom(
-    dataAtom,
-    useCallback((data) => data[dialogName], []),
+  const selectedAtom = useMemo(
+    () =>
+      selectAtom(
+        dataAtom,
+        (data) => data[dialogName],
+      ),
+    [],
   );
 
   return useAtomValue(selectedAtom) || initialData;

@@ -5,14 +5,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { mutate } from 'swr';
 import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 import { useDialog, useDialogValue } from '@lib/hooks/dialog';
-import useResumes from '@src/hooks/useResumes';
 import api from '@lib/utils/api';
 
 const ConfirmDeleteResumeDialog = ({ dialogName = 'ConfirmDeleteResumeDialog' }) => {
-  // const { mutate: resumesMutate } = useResumes();
+
   const { closeDialog } = useDialog();
   const { open, params = {} } = useDialogValue(dialogName);
   const [submitting, setSubmitting] = useState(false);
@@ -35,8 +35,7 @@ const ConfirmDeleteResumeDialog = ({ dialogName = 'ConfirmDeleteResumeDialog' })
     }
 
     toast.success('删除成功');
-    // todo reload
-    // resumesMutate();
+    mutate((key) => Array.isArray(key) && key[0] === '/api/v1/resumes');
   };
 
   return (

@@ -1,7 +1,7 @@
 export type ModulesKey = 'education' | 'work_experience' | 'project';
 
 export interface ResumeBasicField {
-  id: string | number;
+  id: number;
   value: string;
   visible?: boolean;
   is_show_label?: boolean;
@@ -12,9 +12,9 @@ export interface ResumeBasicField {
 }
 
 export interface ModuleBase {
-  id: string | number;
+  key: ModulesKey;
+  id: number;
   resume_id: string | number;
-  key?: ModulesKey;
   visible: boolean;
   label: string;
   module_title_type: string;
@@ -45,12 +45,12 @@ export interface BasicsData extends Record<BasicsDataKeys, ResumeBasicField> {
 export type ResumeBasicsDataKeys = BasicsDataKeys;
 export interface ResumeBasicsData extends Record<BasicsDataKeys, ResumeBasicField> {
   id: number;
-};
+}
 
 export interface ResumeModuleCommonDetail {
   id: number;
-  desc: string;
-  sortIndex: number;
+  desc?: string;
+  sort_index: number;
 }
 
 export interface Education extends ModuleBase {
@@ -58,20 +58,20 @@ export interface Education extends ModuleBase {
 }
 
 export interface EducationDetail {
-  id?: number;
+  id: number;
   name?: string;
-  endOn: string | null;
-  startOn: string | null;
+  end_on: string | null;
+  start_on: string | null;
   desc?: string;
   university_majors?: string;
-  sortIndex: number;
+  sort_index: number;
 }
 
 export interface WorkExperienceDetail {
   id?: number;
   name?: string;
-  endOn: string | null;
-  startOn: string | null;
+  end_on: string | null;
+  start_on: string | null;
   desc?: string;
   sortIndex: number;
   jobTitle?: string;

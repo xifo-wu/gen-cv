@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-import { useAtom } from 'jotai';
 import { Controller, useForm } from 'react-hook-form';
 import {
   useTheme,
@@ -15,41 +13,52 @@ import {
 } from '@mui/material';
 import { TbSchool } from 'react-icons/tb';
 import Grid2 from '@mui/material/Unstable_Grid2';
-import { resumeModuleModal } from '@lib/atom/resume-atom';
-import type { EducationDetail } from './type';
+import api from '@lib/utils/api';
+import { useDialog, useDialogValue } from '@lib/hooks/dialog';
+import useResume from '@lib/hooks/useResume';
+import type { EducationDetail } from '../type';
+import { toast } from 'react-toastify';
+import { memo } from 'react';
 
-// 编辑教育背景详情 Modal 框
-const EditEducationDetailModal = () => {
-  const [modal, setResumeModuleModal] = useAtom(resumeModuleModal);
+// 编辑教育经历详情 Modal 框
+const EditEducationDetailModal = ({ dialogName = 'EditEducationDetailModal' }) => {
   const theme = useTheme();
+  const { resume, resumeSlug, mutate } = useResume();
+  console.log(resumeSlug, 'resumeSlug');
+  const { closeDialog } = useDialog();
+  const { open, params } = useDialogValue(dialogName);
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const { control, reset, handleSubmit } = useForm<EducationDetail>({
-    defaultValues: modal.educationDetail.params,
+  const { control, handleSubmit } = useForm<EducationDetail>({
+    defaultValues: params,
+    values: params,
   });
 
-  useEffect(() => {
-    if (modal.educationDetail.open) {
-      reset(modal.educationDetail.params);
-    }
-  }, [modal.educationDetail.open]);
+  const handleClose = () => void closeDialog(dialogName);
 
-  const handleClose = () => {
-    setResumeModuleModal((draft) => {
-      draft.educationDetail.open = false;
-    });
-  };
+  const handleDetailSubmit = (data: EducationDetail) => {
+    mutate(
+      async (originData: any) => {
+        const { response, error } = await api.put<any, any>(
+          `/api/v1/resumes/${resumeSlug}/education-details/${data.id}`,
+          data,
+        );
+        if (error) {
+          toast.error(error.message);
+          return originData;
+        }
 
-  const handleDetailSubmit = (data: any) => {
-    console.log(data);
+        if (!response) return originData;
+
+        toast.success('更新成功');
+        handleClose();
+        return response;
+      },
+      { revalidate: false },
+    );
   };
 
   return (
-    <Dialog
-      maxWidth="xl"
-      fullScreen={fullScreen}
-      open={modal.educationDetail.open}
-      onClose={handleClose}
-    >
+    <Dialog maxWidth="xl" fullScreen={fullScreen} open={open} onClose={handleClose}>
       <Box component="form" onSubmit={handleSubmit(handleDetailSubmit)}>
         <DialogTitle>
           <Stack direction="row" alignItems="center" spacing={1}>
@@ -84,7 +93,7 @@ const EditEducationDetailModal = () => {
                 render={({ field }) => (
                   <TextField fullWidth margin="dense" label="开始时间" {...field} />
                 )}
-                name="startOn"
+                name="start_on"
                 control={control}
               />
             </Grid2>
@@ -94,7 +103,7 @@ const EditEducationDetailModal = () => {
                 render={({ field }) => (
                   <TextField fullWidth margin="dense" label="开始时间" {...field} />
                 )}
-                name="endOn"
+                name="end_on"
                 control={control}
               />
             </Grid2>
@@ -130,4 +139,4 @@ const EditEducationDetailModal = () => {
   );
 };
 
-export default EditEducationDetailModal;
+export default memo(EditEducationDetailModal);

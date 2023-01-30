@@ -2,6 +2,10 @@ import type { Theme } from "@mui/material";
 
 export default {
   container: (theme: Theme) => ({
+    py: 0.5,
+    px: 1,
+    mx: -1,
+    my: -0.5,
     position: 'relative',
     border: '1px dashed transparent',
     '& .tools': {

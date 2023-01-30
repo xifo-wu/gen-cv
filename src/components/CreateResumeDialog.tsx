@@ -10,7 +10,7 @@ import TextField from '@mui/material/TextField';
 import { toast } from 'react-toastify';
 import { Controller, useForm } from 'react-hook-form';
 import { useRouter } from 'next/router';
-import { useDialog, useDialogValue, useSetDialog } from '@lib/hooks/dialog';
+import { useDialog, useDialogValue } from '@lib/hooks/dialog';
 import useUser from '@src/hooks/useUser';
 import useResumes from '@src/hooks/useResumes';
 import api from '@lib/utils/api';

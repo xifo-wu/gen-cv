@@ -4,7 +4,7 @@ import { Box } from '@mui/material';
 import useApi from '@lib/hooks/useApi';
 import resumeTemplates from '@lib/components/Resume/templates';
 import EditResumeLayout, { ResumeIdProvider } from '@lib/layouts/EditResumeLayout';
-import EditEducationDetailModal from '@lib/components/Resume/EditEducationDetailModal';
+import EditEducationDetailModal from '@lib/components/Resume/components/EditEducationDetailModal';
 import useResume from '@lib/hooks/useResume';
 
 const EditResumePage = () => {
@@ -26,6 +26,8 @@ const EditResumePage = () => {
       }}
     >
       <ResumeComponent preview={false} data={resume} />
+
+      <EditEducationDetailModal />
     </Box>
   );
 };
@@ -34,8 +36,6 @@ EditResumePage.getLayout = function getLayout(page: React.ReactElement) {
   return (
     <ResumeIdProvider>
       <EditResumeLayout>{page}</EditResumeLayout>
-
-      <EditEducationDetailModal />
     </ResumeIdProvider>
   );
 };

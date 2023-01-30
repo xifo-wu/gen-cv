@@ -7,6 +7,7 @@ import useApi from '@lib/hooks/useApi';
 import api from '@lib/utils/api';
 import FieldInput from '@lib/components/Resume/components/FieldInput';
 import type { ResumeType, ModulesKey } from '@lib/components/Resume/type';
+import useResume from '@lib/hooks/useResume';
 
 interface Props {
   data: ResumeType[ModulesKey];
@@ -20,10 +21,10 @@ const toLine = (str: string | undefined) => {
 
 const ModuleTitle = ({ data, themeColor, preview }: Props) => {
   const theme = useTheme();
+  const { resume, mutate } = useResume();
+
   const debounceRef = useRef<NodeJS.Timer>();
   const { control, watch } = useForm<ResumeType[ModulesKey]>({ defaultValues: data });
-  const baseApi = `api/v1/resumes/${data.resumeID}`;
-  const { mutate } = useApi<any>(data.resumeID ? baseApi : null);
 
   const handleBlur = () => {
     if (debounceRef.current) {
@@ -31,18 +32,18 @@ const ModuleTitle = ({ data, themeColor, preview }: Props) => {
     }
 
     debounceRef.current = setTimeout(() => {
-      mutate(
-        async (originData: any) => {
-          const { response, error } = await api.patch<any, any>(`${baseApi}/${toLine(data.key)}`, watch());
-          if (error) {
-            toast.error(error.message);
-            return originData;
-          }
+      // mutate(
+      //   async (originData: any) => {
+      //     const { response, error } = await api.patch<any, any>(`${baseApi}/${toLine(data.key)}`, watch());
+      //     if (error) {
+      //       toast.error(error.message);
+      //       return originData;
+      //     }
 
-          return response;
-        },
-        { revalidate: false },
-      );
+      //     return response;
+      //   },
+      //   { revalidate: false },
+      // );
     }, 2000);
   };
 

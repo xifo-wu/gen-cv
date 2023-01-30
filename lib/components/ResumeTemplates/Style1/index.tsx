@@ -3,13 +3,14 @@
 import _ from 'lodash';
 import { Box, Paper } from '@mui/material';
 import Basic from './Basic';
-import helpers from '@lib/helpers';
+
 import type { ModulesKey, ResumePaperProps, ResumeType } from '@lib/components/Resume/type';
 import contentMap from '@lib/components/Resume/contentMap';
 import commonStyles from '@lib/components/Resume/commonStyles';
 import styles from './styles';
 import ModuleTitle from './ModuleTitle';
-import ContentWrapper from '@lib/components/Resume/ContentWrapper';
+import ContentWrapper from '@lib/components/Resume/components/ContentWrapper';
+import buildModuleItems from '@lib/components/Resume/helpers/buildModuleItems';
 
 const Empty = () => {
   return <div>empty</div>;
@@ -17,7 +18,9 @@ const Empty = () => {
 
 const ResumeTemplateStyle1 = ({ preview, data }: ResumePaperProps) => {
   const { module_order: moduleOrder, theme_color: themeColor = '#2065d1' } = data;
-  const moduleItems = helpers.buildModuleItems(data, moduleOrder);
+  const moduleItems = buildModuleItems(data, moduleOrder);
+
+  console.log(moduleItems, "moduleItems", moduleOrder)
 
   return (
     <Paper sx={commonStyles.resumePaper} elevation={0}>
@@ -37,13 +40,14 @@ const ResumeTemplateStyle1 = ({ preview, data }: ResumePaperProps) => {
 
         <Box sx={{ mt: 2 }}>
           {_.map(moduleItems, (item) => {
-            const ContentComponent = contentMap[item.contentType]?.component || Empty;
+            const ContentComponent = contentMap[item.content_type]?.component || Empty;
+
             // @ts-ignore
             const details = item[`${item.key}_details`] || [];
 
             return (
               <Box
-                key={`${item.contentType}-${item.id}`}
+                key={`${item.content_type}-${item.id}`}
                 sx={{
                   display: item.visible ? 'block' : 'none',
                   my: 1,
@@ -53,7 +57,7 @@ const ResumeTemplateStyle1 = ({ preview, data }: ResumePaperProps) => {
                 <Box sx={{ my: 1 }}>
                   {details.map((li: any) => (
                     <ContentWrapper moduleName={item.key} data={li} key={li.id}>
-                      <Box sx={{ px: 3, my: 1 }}>
+                      <Box sx={{ my: 1 }}>
                         <ContentComponent preview={preview} data={li} />
                       </Box>
                     </ContentWrapper>
