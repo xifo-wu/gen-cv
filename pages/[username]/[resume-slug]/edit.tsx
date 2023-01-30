@@ -1,20 +1,20 @@
-import React from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import { Box } from '@mui/material';
 import useApi from '@lib/hooks/useApi';
 import resumeTemplates from '@lib/components/Resume/templates';
 import EditResumeLayout, { ResumeIdProvider } from '@lib/layouts/EditResumeLayout';
 import EditEducationDetailModal from '@lib/components/Resume/EditEducationDetailModal';
+import useResume from '@lib/hooks/useResume';
 
 const EditResumePage = () => {
-  const router = useRouter();
-  const { query } = router;
+  const { resume, loading } = useResume();
 
-  const { data: resume } = useApi<any>(
-    query['resume-slug'] ? `/api/v1/resumes/${query['resume-slug']}` : null,
-  );
+  if (loading || !resume) {
+    return <div>Loading</div>;
+  }
 
-  // const ResumeComponent = resumeTemplates[resume.layoutType]?.component;
+  const ResumeComponent = resumeTemplates[resume.layout_type]?.component;
 
   return (
     <Box
@@ -25,7 +25,7 @@ const EditResumePage = () => {
         },
       }}
     >
-      {/* <ResumeComponent preview={false} data={resume} /> */}
+      <ResumeComponent preview={false} data={resume} />
     </Box>
   );
 };

@@ -13,6 +13,8 @@ import styles from './styles';
 
 import type { ResumeBasicsData, ResumeBasicsDataKeys } from '../Resume/type';
 import api from '@lib/utils/api';
+import useResume from '@lib/hooks/useResume';
+import { resumeBasicInitData } from '../Resume/initData';
 
 // 用于渲染字段列表
 const resumeBasicArray: Array<ResumeBasicsDataKeys> = [
@@ -20,29 +22,28 @@ const resumeBasicArray: Array<ResumeBasicsDataKeys> = [
   'job',
   'mobile',
   'email',
-  'educationalQualifications',
+  'educational_qualifications',
   'website',
   'birthday',
   'age',
+  // TODO 支持照片
   'avatar',
-  'jobYear',
-  'inAWord',
+  'job_year',
+  'in_a_word',
 ];
 
 const ResumeBasicDrawer = () => {
+  const { resume, mutate, apiUrl } = useResume();
+
   const debounceRef = useRef<NodeJS.Timer>();
-  const { mutate } = useSWRConfig();
-  const [{ open, resume }, setResumeBasicDrawerValue] = useAtom(resumeBasicDrawer);
 
-  const resumeBasic = useMemo(() => {
-    return (resume?.resumeBasic || {}) as ResumeBasicsData;
-  }, [resume]);
+  const [{ open }, setResumeBasicDrawerValue] = useAtom(resumeBasicDrawer);
+  const resumeBasic = resume?.resume_basic;
 
-  const { control, watch, reset } = useForm<ResumeBasicsData>();
-
-  useEffect(() => {
-    reset(resumeBasic);
-  }, [resumeBasic]);
+  const { control, watch } = useForm<ResumeBasicsData>({
+    defaultValues: resumeBasicInitData,
+    values: resumeBasic,
+  });
 
   const handleToggleDrawer = (open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
     if (
@@ -61,14 +62,12 @@ const ResumeBasicDrawer = () => {
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
-    const baseUrl = `/api/v1/resumes/${resume?.id}`;
 
     debounceRef.current = setTimeout(() => {
       mutate(
-        baseUrl,
         async (originData: any) => {
           // TODO(FIX BUG): 没有 ID 的时候需要和其他有 ID 的显示格式保持一致。
-          const { response, error } = await api.put<any, any>(`${baseUrl}/resume-basic`,  watch());
+          const { response, error } = await api.put<any, any>(`${apiUrl}/resume-basic`, watch());
           if (error) {
             toast.error(error.message);
             return originData;
@@ -118,6 +117,7 @@ const ResumeBasicDrawer = () => {
                         size="small"
                         hiddenLabel
                         {...field}
+                        value={field.value || ''}
                         onBlur={(e) => {
                           field.onBlur();
                           handleUpdateResumeBasic();
@@ -125,18 +125,19 @@ const ResumeBasicDrawer = () => {
                       />
                     )}
                     name={`${item}.label`}
-                    defaultValue={resumeBasic[item]?.label || ''}
+                    // defaultValue={resumeBasic[item]?.label || ''}
                     control={control}
                   />
 
                   <Controller
-                    defaultValue={resumeBasic[item]?.value || ''}
+                    // defaultValue={resumeBasic[item]?.value || ''}
                     render={({ field }) => (
                       <TextField
                         placeholder="内容"
                         size="small"
                         hiddenLabel
                         {...field}
+                        value={field.value || ''}
                         onBlur={(e) => {
                           field.onBlur();
                           handleUpdateResumeBasic();
@@ -156,11 +157,12 @@ const ResumeBasicDrawer = () => {
                           field.onChange(e);
                           handleUpdateResumeBasic();
                         }}
-                        checked={field.value}
+                        value={field.value || false}
+                        checked={field.value || false}
                       />
                     )}
                     name={`${item}.visible`}
-                    defaultValue={resumeBasic[item]?.visible || false}
+                    // defaultValue={resumeBasic[item]?.visible || false}
                     control={control}
                   />
                 </Stack>

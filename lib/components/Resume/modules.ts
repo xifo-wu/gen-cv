@@ -5,13 +5,13 @@ export const resumeBasicDefaultZhCN: Record<ResumeBasicsDataKeys, string> = {
   mobile: '联系电话',
   job: '求职意向',
   email: '电子邮箱',
-  educationalQualifications: '最高学历',
+  educational_qualifications: '最高学历',
   website: '个人网站',
   birthday: '出生日期',
-  jobYear: '工作年限',
+  job_year: '工作年限',
   age: '年龄',
   avatar: '照片',
-  inAWord: '一句话',
+  in_a_word: '一句话',
 };
 
 export const moduleMap = {

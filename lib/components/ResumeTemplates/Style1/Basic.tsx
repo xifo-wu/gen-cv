@@ -1,69 +1,57 @@
 import _ from 'lodash';
-import { useRef, useEffect, useMemo } from 'react';
-import { useRouter } from 'next/router';
+import { useRef } from 'react';
 import { useForm } from 'react-hook-form';
-import { TbSettings } from 'react-icons/tb';
-import { Grid, Box, IconButton, useTheme, Typography } from '@mui/material';
+import { Grid, Box, useTheme } from '@mui/material';
 import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version
-import useApi from '@lib/hooks/useApi';
 import type {
-  BasicsData,
+  ResumeBasicsData,
   ResumeBasicsDataKeys,
-  ResumeBasicField,
 } from '@lib/components/Resume/type';
 import styles from './styles';
-
-import api from '@lib/utils/api';
-import { toast } from 'react-toastify';
 import FieldInput from '@lib/components/Resume/components/FieldInput';
 import BasicLayoutPopper from '@lib/components/Resume/components/BasicLayoutPopper';
-import BasicLayoutSetting from '@lib/components/Resume/components/BasicLayoutSetting';
-
 import basicDefaultIcon from '@lib/components/Resume/basicDefaultIcon';
-import { useResumeId } from '@lib/layouts/EditResumeLayout';
 import SortResumeBasicFieldPopper from '@lib/components/Resume/SortResumeBasicFieldPopper';
+import useResume from '@lib/hooks/useResume';
+import { resumeBasicInitData } from '@lib/components/Resume/initData';
+import { updateResumeBasic } from '@lib/services/resume';
 
 interface Props {
-  data: BasicsData;
+  data: ResumeBasicsData;
   preview?: boolean;
-  themeColor: string;
 }
 
 const infoKeys: Array<ResumeBasicsDataKeys> = [
   'mobile',
   'email',
-  'educationalQualifications',
+  'educational_qualifications',
   'website',
   'birthday',
   'age',
-  'jobYear',
+  'job_year',
 ];
 
-const Basic = ({ themeColor, data, preview }: Props) => {
-  const { control, reset, watch } = useForm<BasicsData>({ defaultValues: data });
+const Basic = ({ data, preview }: Props) => {
+  const { resume, mutate } = useResume();
+  const { control, watch } = useForm<ResumeBasicsData>({
+    defaultValues: resumeBasicInitData,
+    values: resume?.resume_basic,
+  });
 
-  const resumeId = useResumeId() as string;
-  const baseApi = `/api/v1/resumes/${resumeId}`;
-  const { mutate } = useApi<any>(resumeId ? baseApi : null);
+  if (_.isEmpty(resume)) return <Box />;
 
   const theme = useTheme();
   const debounceRef = useRef<NodeJS.Timer>();
 
-  const infoItems = _.chain(data)
+  const infoItems = _.chain(resume?.resume_basic)
     .pick(infoKeys)
     .map((item, key) => ({
       ...item,
-      key,
+      key: key as ResumeBasicsDataKeys,
     }))
     .filter((item) => !!item.visible)
-    .sortBy((item) => item.sortIndex)
+    .sortBy((item) => item.sort_index)
     .value();
-
-  useEffect(() => {
-    reset(data);
-  }, [data]);
-
-  if (_.isEmpty(data)) return <Box />;
 
   const handleBlur = async () => {
     if (debounceRef.current) {
@@ -73,13 +61,12 @@ const Basic = ({ themeColor, data, preview }: Props) => {
     debounceRef.current = setTimeout(() => {
       mutate(
         async (originData: any) => {
-          const { response, error } = await api.put<any, any>(`${baseApi}/resume-basic`, watch());
-          if (error) {
-            toast.error(error.message);
-            return originData;
+          const response = await updateResumeBasic(resume.slug, watch());
+          if (response) {
+            return response;
           }
 
-          return response;
+          return originData;
         },
         { revalidate: false },
       );
@@ -100,7 +87,7 @@ const Basic = ({ themeColor, data, preview }: Props) => {
           />
           {data.job.visible && (
             <Box sx={{ display: 'inline-block', ml: 1 }}>
-              {data.job.isShowLabel && (
+              {data.job.is_show_label && (
                 <FieldInput
                   name="job.label"
                   control={control}
@@ -116,21 +103,18 @@ const Basic = ({ themeColor, data, preview }: Props) => {
                 control={control}
                 readOnly={preview}
                 onBlur={handleBlur}
-                minWidth={20}
-                fontSize={16}
               />
             </Box>
           )}
 
-          {data.inAWord.visible && (
+          {data?.in_a_word?.visible && (
             <Box sx={{ mb: 1 }}>
               <FieldInput
                 multiline
-                name="inAWord.value"
+                name="in_a_word.value"
                 control={control}
                 readOnly={preview}
                 onBlur={handleBlur}
-                minWidth={20}
                 fontSize={12}
                 sx={{ mr: 1, flexShrink: 0 }}
               />
@@ -194,10 +178,10 @@ const Basic = ({ themeColor, data, preview }: Props) => {
 
                 return (
                   <Grid2 xs={6} key={item.id} sx={{ display: 'flex', alignItems: 'center' }}>
-                    {item.isShowIcon && (
+                    {item.is_show_icon && (
                       <Icon style={{ flexShrink: 0, fontSize: 22, marginRight: 8 }} />
                     )}
-                    {item.isShowLabel && (
+                    {item.is_show_label && (
                       <FieldInput
                         // @ts-ignore
                         name={`${item.key}.label`}
@@ -226,7 +210,7 @@ const Basic = ({ themeColor, data, preview }: Props) => {
           </Box>
         </Grid>
         <Grid item xs="auto">
-          {data.avatar.visible && (
+          {data?.avatar?.visible && (
             <Box sx={{ float: 'right', clear: 'left', width: '3.5cm', height: '5.2cm' }}>
               <Box
                 component="img"

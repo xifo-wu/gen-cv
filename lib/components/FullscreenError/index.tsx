@@ -32,6 +32,7 @@ const errorEnum: Record<number, { title: string; message: string }> = {
 
 const FullscreenError = (props: FullscreenErrorProps) => {
   const { httpStatus = 400, description } = props;
+
   return (
     <Box
       sx={{

@@ -16,7 +16,7 @@ const Empty = () => {
 };
 
 const ResumeTemplateStyle1 = ({ preview, data }: ResumePaperProps) => {
-  const { moduleOrder, themeColor = '#2065d1' } = data;
+  const { module_order: moduleOrder, theme_color: themeColor = '#2065d1' } = data;
   const moduleItems = helpers.buildModuleItems(data, moduleOrder);
 
   return (
@@ -33,14 +33,13 @@ const ResumeTemplateStyle1 = ({ preview, data }: ResumePaperProps) => {
             margin: '0 auto',
           }}
         />
-        <Basic themeColor={themeColor} data={data.resumeBasic} />
+        <Basic data={data.resume_basic} />
 
         <Box sx={{ mt: 2 }}>
           {_.map(moduleItems, (item) => {
             const ContentComponent = contentMap[item.contentType]?.component || Empty;
             // @ts-ignore
-            const details = item[`${item.key}Details`];
-            console.log(item, details," details")
+            const details = item[`${item.key}_details`] || [];
 
             return (
               <Box

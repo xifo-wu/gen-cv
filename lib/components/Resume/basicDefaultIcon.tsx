@@ -17,8 +17,8 @@ const iconList: Record<string, IconType> = {
   job: TbTie,
   age: TbClock,
   birthday: TbEgg,
-  educationalQualifications: TbSchool,
-  jobYear: TbTimeline,
+  educational_qualifications: TbSchool,
+  job_year: TbTimeline,
 };
 
 export default iconList;

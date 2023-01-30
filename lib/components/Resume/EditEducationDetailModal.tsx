@@ -33,8 +33,6 @@ const EditEducationDetailModal = () => {
     }
   }, [modal.educationDetail.open]);
 
-  console.log(modal, modal.educationDetail.params, 'modal');
-
   const handleClose = () => {
     setResumeModuleModal((draft) => {
       draft.educationDetail.open = false;
@@ -76,7 +74,7 @@ const EditEducationDetailModal = () => {
                 render={({ field }) => (
                   <TextField fullWidth margin="dense" label="专业名称" {...field} />
                 )}
-                name="universityMajors"
+                name="university_majors"
                 control={control}
               />
             </Grid2>

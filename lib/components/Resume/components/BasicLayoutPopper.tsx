@@ -1,25 +1,22 @@
 import _ from 'lodash';
-import { useRef, useState } from 'react';
-import {
-  Box,
-  ClickAwayListener,
-  Grow,
-  IconButton,
-  MenuItem,
-  MenuList,
-  Paper,
-  Popper,
-} from '@mui/material';
-import { TbMist } from 'react-icons/tb';
-import { useResumeId } from '@lib/layouts/EditResumeLayout';
-import useApi from '@lib/hooks/useApi';
+import produce from 'immer';
+import Box from '@mui/material/Box';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import IconButton from '@mui/material/IconButton';
+import MenuItem from '@mui/material/MenuItem';
+import MenuList from '@mui/material/MenuList';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
 import BasicLayoutPopperMenuItem from './BasicLayoutPopperMenuItem';
-import styles from './BasicLayoutPopperStyle';
+import { TbMist } from 'react-icons/tb';
+import { useRef, useState } from 'react';
 import { updateResumeBasic } from '@lib/services/resume';
+import useResume from '@lib/hooks/useResume';
+import styles from './BasicLayoutPopperStyle';
 
 const BasicLayoutPopper = () => {
-  const resumeId = useResumeId() as string;
-  const { data: resume, mutate } = useApi<any>(resumeId ? `/api/v1/resumes/${resumeId}` : null);
+  const { resume, mutate } = useResume();
 
   const anchorRef = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -46,24 +43,25 @@ const BasicLayoutPopper = () => {
   }
 
   function handleChangeBasic(isShowIcon: boolean, isShowLabel: boolean) {
-    const nextData = _.cloneDeep(resume.resumeBasic);
-    _.forEach(nextData, (item, key) => {
-      if (_.includes(['job', 'name'], key)) {
-        return;
-      }
+    if (!resume) return;
 
-      if (_.has(item, 'isShowLabel')) {
-        item.isShowLabel = isShowLabel;
-      }
+    const newResumeBasic = produce(resume.resume_basic, (draft) => {
+      _.forEach(draft, (item) => {
+        if (typeof item === 'number') return;
 
-      if (_.has(item, 'isShowIcon')) {
-        item.isShowIcon = isShowIcon;
-      }
+        if (_.has(item, 'is_show_label')) {
+          item.is_show_label = isShowLabel;
+        }
+
+        if (_.has(item, 'is_show_icon')) {
+          item.is_show_icon = isShowIcon;
+        }
+      });
     });
 
     mutate(
       async (originData: any) => {
-        const response = await updateResumeBasic(resumeId, nextData);
+        const response = await updateResumeBasic(resume.slug, newResumeBasic);
         if (response) {
           return response;
         }

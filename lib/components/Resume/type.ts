@@ -1,26 +1,26 @@
-export type ModulesKey = 'education' | 'workExperience' | 'project';
+export type ModulesKey = 'education' | 'work_experience' | 'project';
 
 export interface ResumeBasicField {
   id: string | number;
   value: string;
   visible?: boolean;
-  isShowLabel?: boolean;
-  isShowIcon?: boolean;
+  is_show_label?: boolean;
+  is_show_icon?: boolean;
   label?: string;
   icon?: string;
-  sortIndex?: number;
+  sort_index?: number;
 }
 
 export interface ModuleBase {
   id: string | number;
-  resumeID: string | number;
+  resume_id: string | number;
   key?: ModulesKey;
   visible: boolean;
   label: string;
-  moduleTitleType: string;
-  contentType: string;
+  module_title_type: string;
+  content_type: string;
   config: string;
-  removeIds?: (string | number)[];
+  remove_ids?: (string | number)[];
 }
 
 // 个人信息的 Key
@@ -29,22 +29,23 @@ export type BasicsDataKeys =
   | 'job'
   | 'mobile'
   | 'email'
-  | 'educationalQualifications'
+  | 'educational_qualifications'
   | 'website'
   | 'birthday'
   | 'age'
   | 'avatar'
-  | 'jobYear'
-  | 'inAWord';
+  | 'job_year'
+  | 'in_a_word';
 
 // 个人信息基础信息
 export interface BasicsData extends Record<BasicsDataKeys, ResumeBasicField> {
   id: string | number;
-  orderKeys: string;
 }
 
 export type ResumeBasicsDataKeys = BasicsDataKeys;
-export type ResumeBasicsData = BasicsData;
+export interface ResumeBasicsData extends Record<BasicsDataKeys, ResumeBasicField> {
+  id: number;
+};
 
 export interface ResumeModuleCommonDetail {
   id: number;
@@ -62,7 +63,7 @@ export interface EducationDetail {
   endOn: string | null;
   startOn: string | null;
   desc?: string;
-  universityMajors?: string;
+  university_majors?: string;
   sortIndex: number;
 }
 
@@ -93,16 +94,18 @@ export interface Project extends ModuleBase {
   projectDetails: ProjectDetail[];
 }
 
+// 简历数据类型
 export interface ResumeType {
   id: number;
   name: string;
   slug: string;
-  themeColor: string;
-  layoutType: string;
-  moduleOrder: string;
-  resumeBasic: BasicsData;
+  theme_color: string;
+  layout_type: string;
+  module_order: string;
+  // 基本信息
+  resume_basic: ResumeBasicsData;
   education: Education;
-  workExperience: WorkExperience;
+  work_experience: WorkExperience;
   project: Project;
 }
 

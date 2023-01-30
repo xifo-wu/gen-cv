@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import produce from 'immer';
 import { useRef, useState, useEffect } from 'react';
 import { Reorder } from 'framer-motion';
 import { Box, ClickAwayListener, Grow, IconButton, Paper, Popper } from '@mui/material';
@@ -6,12 +7,12 @@ import { TbLineHeight } from 'react-icons/tb';
 import { useResumeId } from '@lib/layouts/EditResumeLayout';
 import { updateResumeBasic } from '@lib/services/resume';
 import styles from './SortResumeBasicFieldPopperStyle';
-import type { ResumeBasicField, ResumeBasicsData } from './type';
-import { useSWRConfig } from 'swr';
 import SortResumeBasicFieldMenuItem from './SortResumeBasicFieldMenuItem';
+import useResume from '@lib/hooks/useResume';
+import type { ResumeBasicsDataKeys, ResumeBasicField, ResumeBasicsData } from './type';
 
 export interface ResumeBasicFieldAndKey extends ResumeBasicField {
-  key?: string;
+  key: ResumeBasicsDataKeys;
 }
 
 interface Props {
@@ -20,10 +21,11 @@ interface Props {
 }
 
 const SortResumeBasicFieldPopper = ({ resumeBaisc, items }: Props) => {
-  const { mutate } = useSWRConfig();
-  const resumeId = useResumeId();
+  const { resume, mutate } = useResume();
+
   const debounceRef = useRef<NodeJS.Timer>();
   const anchorRef = useRef<HTMLButtonElement>(null);
+
   const [open, setOpen] = useState(false);
   const [reordered, setReordered] = useState(items);
 
@@ -53,30 +55,27 @@ const SortResumeBasicFieldPopper = ({ resumeBaisc, items }: Props) => {
   const handleReorder = (newItems: ResumeBasicFieldAndKey[]) => {
     setReordered(newItems);
 
+    if (!resume) {
+      return;
+    }
+
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
 
     debounceRef.current = setTimeout(() => {
+      const newResumeBasic = produce(resume.resume_basic, (draft) => {
+        _.forEach(newItems, (item, index) => {
+          if (!item.key) return;
+
+          draft[item.key].sort_index = index
+        });
+      });
+
       mutate(
-        `/api/v1/resumes/${resumeId}`,
         async (originData: any) => {
-          // TODO: Fix any
-          const newBasic = _.reduce<ResumeBasicFieldAndKey, any>(
-            newItems,
-            (sum, item, index) => {
-              if (!item.key) return sum;
 
-              sum[item.key] = {
-                ...item,
-                sortIndex: index,
-              };
-              return sum;
-            },
-            { ...resumeBaisc },
-          );
-
-          const response = updateResumeBasic(resumeId as string, newBasic);
+          const response = updateResumeBasic(resume!.slug, newResumeBasic);
           if (!response) return originData;
 
           return response;

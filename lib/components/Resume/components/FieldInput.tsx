@@ -1,5 +1,4 @@
-import { useState, useEffect } from 'react';
-import { Controller } from 'react-hook-form';
+import { Controller, useWatch } from 'react-hook-form';
 import { Box, Input } from '@mui/material';
 import type { InputProps } from '@mui/material';
 import type { FocusEventHandler } from 'react';
@@ -7,26 +6,22 @@ import type { Path, Control, FieldValues } from 'react-hook-form';
 
 interface Props<T extends FieldValues, R> extends InputProps {
   control: Control<T, R>;
-  onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
   name: Path<T>;
-  fontSize: number;
-  minWidth: number;
+  onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  fontSize?: number;
+  minWidth?: number;
 }
 
 const FieldInput = <T extends FieldValues, R>({
   name,
   control,
   onBlur,
-  fontSize,
   sx,
-  minWidth,
+  fontSize = 16,
+  minWidth = 20,
   ...rest
 }: Props<T, R>) => {
-  const [inputValue, setInputValue] = useState(control._getWatch(name) || '');
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setInputValue(e.target.value);
-  };
+  const value = useWatch({ name, control });
 
   return (
     <Box
@@ -34,16 +29,18 @@ const FieldInput = <T extends FieldValues, R>({
         width: 'fit-content',
         display: 'inline-flex',
         position: 'relative',
+        minWidth: 0,
         mb: 1,
         '& .width-block': {
           minWidth,
           minHeight: Math.round(fontSize / 0.66666667),
+          whiteSpace: 'nowrap',
           display: 'inline-block',
           width: '100%',
           height: '100%',
           fontFamily: 'Monaco',
           visibility: 'hidden',
-          fontSize: fontSize,
+          fontSize,
         },
         ...sx,
       }}
@@ -54,10 +51,7 @@ const FieldInput = <T extends FieldValues, R>({
           <Input
             {...rest}
             {...field}
-            onChange={(e) => {
-              field.onChange(e);
-              handleChange(e);
-            }}
+            value={field.value || ''}
             onBlur={(e) => {
               field.onBlur();
               onBlur?.(e);
@@ -67,9 +61,12 @@ const FieldInput = <T extends FieldValues, R>({
               fontFamily: 'Monaco',
               width: '100%',
               '&:before': {
-                display: inputValue.length === 0 ? 'inline-block' : 'none',
+                display: (value || '').length === 0 ? 'inline-block' : 'none',
               },
               '& .MuiInputBase-input': {
+                overflow: 'hidden',
+                whiteSpace: 'nowrap',
+                textOverflow: 'ellipsis',
                 fontSize,
               },
               minWidth,
