@@ -1,10 +1,8 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 import { Box } from '@mui/material';
-import useApi from '@lib/hooks/useApi';
 import resumeTemplates from '@lib/components/Resume/templates';
 import EditResumeLayout, { ResumeIdProvider } from '@lib/layouts/EditResumeLayout';
 import EditEducationDetailModal from '@lib/components/Resume/components/EditEducationDetailModal';
+import AddEducationDetailModal from '@lib/components/Resume/components/AddEducationDetailModal';
 import useResume from '@lib/hooks/useResume';
 
 const EditResumePage = () => {
@@ -28,6 +26,7 @@ const EditResumePage = () => {
       <ResumeComponent preview={false} data={resume} />
 
       <EditEducationDetailModal />
+      <AddEducationDetailModal />
     </Box>
   );
 };
